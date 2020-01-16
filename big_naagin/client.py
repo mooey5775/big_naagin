@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 from threading import Event
 import logging
+import time
 
 BROKER_ADDRESS = '35.243.178.248'
 
@@ -13,7 +14,7 @@ class NaaginMqttClient:
         self.callbacks = {}
         self.address = address
 
-        self.client = mqtt.Client("big_naagin")
+        self.client = mqtt.Client(f"big_naagin{int(time.time())}")
         self.client.on_message = self._create_message_callback()
         self.client.connect(self.address)
         self.client.subscribe('robot_return/#')
