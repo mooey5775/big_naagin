@@ -1,3 +1,6 @@
-from big_naagin import app
+from big_naagin import app, setup_app
 
-app.run()
+if __name__ == '__main__':
+    setup_app()
+    print("hch")
+    app.run()
