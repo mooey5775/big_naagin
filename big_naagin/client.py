@@ -47,7 +47,17 @@ class NaaginMqttClient:
         logging.debug(message)
 
         self.client.publish(f'robot_cmd/{naagin_id}/{cmd}',
-                            str(message))
+                            str(message), qos=2)
+
+    def cancel_callback(self, naagin_id):
+        try:
+            for event, payload in self.callbacks[naagin_id]:
+                payload.payload = 'cancelled'
+                event.set()
+
+            self.callbacks[naagin_id] = []
+        except KeyError:
+            pass
 
     def command_with_response(self, naagin_id, cmd, message=''):
         event = Event()

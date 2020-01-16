@@ -1,11 +1,42 @@
+import time
+from threading import Timer
+
 from .client import naagin_client
 
 # tank, left, right, pitch, yaw, home, distance, air
 
+class Watchdog(Exception):
+    def __init__(self, timeout, naagin_id, userHandler=None):  # timeout in seconds
+        self.timeout = timeout
+        self.naagin_id = naagin_id
+        self.handler = userHandler if userHandler is not None else self.defaultHandler
+        self.timer = Timer(self.timeout, self.handler)
+        self.timer.start()
+
+    def reset(self):
+        self.timer.cancel()
+        self.timer = Timer(self.timeout, self.handler)
+        self.timer.start()
+
+    def stop(self):
+        self.timer.cancel()
+
+    def defaultHandler(self):
+        naagin_client.cancel_callback(self.naagin_id)
+
 class Naagin:
     def __init__(self, naagin_id):
         self.id = naagin_id
-        self.aqs_present = (naagin_client.command_with_response(self.id, 'air') != 'nc')
+        wdt = Watchdog(2, self.id)
+        resp = naagin_client.command_with_response(self.id, 'air')
+        self.aqs_present = (resp != 'nc')
+        wdt.stop()
+
+        if resp == 'cancelled':
+            raise ValueError("Naagin failed to connect!")
+
+        self.last_time = 0
+        self.last_dist = 0
 
     def stop(self):
         naagin_client.command(self.id, 'tank', '0 0')
@@ -50,7 +81,13 @@ class Naagin:
         naagin_client.command(self.id, 'left', speed)
 
     def distance(self):
+        if time.time() - self.last_time < 0.25:
+            # whoa! slow down!
+            return self.last_dist
+
         resp = naagin_client.command_with_response(self.id, 'distance')
+        self.last_dist = int(resp)
+        self.last_time = time.time()
         return int(resp)
 
     def air_quality(self):
