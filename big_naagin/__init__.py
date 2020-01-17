@@ -6,6 +6,15 @@ from collections import deque
 import time
 
 from .naagin import Naagin
+
+from .saved_routines import climb
+from .saved_routines import commands
+from .saved_routines import forward
+from .saved_routines import obstacle
+from .saved_routines import swerve
+from .saved_routines import turnleft
+from .saved_routines import turnright
+
 app = Flask(__name__)
 
 naagin_swarm = {}
@@ -84,20 +93,20 @@ def executeCommand(naaginId, command):
 def executeProgram(programName):    
     func = None
     if programName == "forward":
-        pass
+        func = forward.run
     elif programName == "leftTurn":
-        pass
+        func = turnleft.run
     elif programName == "rightTurn":
-        pass
+        func = turnright.run
     elif programName == "climb":
-        pass
+        func = climb.run
     elif programName == "swerve":
-        pass
+        func = swerve.run
     elif programName == "obstacle":
-        pass
+        func = obstacle.run
     # thread the function call
     if func is not None:
-        t1 = threading.Thread(target=func, args=#naaginChain)
+        t1 = threading.Thread(target=func, args=make_naagin_list())
         t1.start()
     return "Ran program" + programName
 

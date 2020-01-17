@@ -1,4 +1,4 @@
-from commands import *
+from .commands import *
 
 def run(swarm):
     naaginSwarm = swarm
