@@ -1,0 +1,52 @@
+<!doctype html>
+<title>Naagin Controller</title>
+<style>
+.column {
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+button {
+    width: 30%;
+    text-align: center;
+    display: inline-block; 
+    margin: 0 auto;
+    padding: 3px;
+}
+</style>
+<div class="row">
+    {% for naaginId in range(4) %}
+        <div class="column">
+            <h1>Naagin {{ naaginId }}</h1>
+            <br>
+            <button onclick="controlNaagin({{ naaginId }}, 'forwards')">Forward</button>
+            <br>
+            <button onclick="controlNaagin({{ naaginId }}, 'left')">Left</button><button onclick="controlNaagin({{ naaginId }}, 'right')">Right</button>
+            <br>
+            <button onclick="controlNaagin({{ naaginId }}, 'backwards')">Backwards</button>
+            <br><br>
+            <button onclick="controlNaagin({{ naaginId }}, 'lock')">Lock</button><button onclick="controlNaagin({{ naaginId }}, 'unlock')">Unlock</button>
+            <br><br>
+            <button onclick="controlNaagin({{ naaginId }}, 'up')">Up</button><button onclick="controlNaagin({{ naaginId }}, 'straightPitch')">Straight Pitch</button><button onclick="controlNaagin({{ naaginId }}, 'down')">Down</button>
+            <br><br>
+            <button onclick="controlNaagin({{ naaginId }}, 'leftYaw')">Yaw Left</button><button onclick="controlNaagin({{ naaginId }}, 'straightYaw')">Yaw Straight</button><button onclick="controlNaagin({{ naaginId }}, 'rightYaw')">Yaw Right</button>
+            <br><br>
+            <button onclick="controlNaagin({{ naaginId }}, 'home')">Home</button>
+            <br><br>
+            <button onclick="controlNaagin({{ naaginId }}, 'stop')">Stop</button>
+        </div>
+    {% endfor %}
+</div>
+<script>
+function controlNaagin(naaginId, command) {
+    var url = window.location.href + naaginId + "/" + command;
+    console.log(url)
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
+}
+</script>
