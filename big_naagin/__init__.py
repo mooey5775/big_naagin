@@ -51,52 +51,52 @@ def run_lock(naaginId):
     last_locks.append(naaginId)
     if len(last_locks) == 3:
         current_order = list(reversed(list(last_locks))) + [6 - sum(last_locks)]
-    
+
     logging.debug(last_locks)
     logging.info(current_order)
 
 @app.route("/<naaginId>/<command>")
 def executeCommand(naaginId, command):
-    try:
-        naaginId = int(naaginId)
-        naaginBot = naagin_swarm[naaginId]
-        if command == "forwards":
-            naaginBot.tank(50, 50)
-        elif command == "left":
-            naaginBot.tank(-75, 125)
-        elif command == "right":
-            naaginBot.tank(125, -75)
-        elif command == "backwards":
-            naaginBot.tank(-50, -50)
-        elif command == "lock":
-            run_lock(naaginId)
-            naaginBot.lock()
-        elif command == "unlock":
-            if naaginId in last_locks:
-                last_locks.remove(naaginId)
-            naaginBot.unlock()
-        elif command == "up":
-            naaginBot.pitch(45)
-        elif command == "straightPitch":
-            naaginBot.pitch(0)
-        elif command == "down":
-            naaginBot.pitch(-45)
-        elif command == "leftYaw":
-            naaginBot.yaw(-60)
-        elif command == "straightYaw":
-            naaginBot.yaw(0)
-        elif command == "rightYaw":
-            naaginBot.yaw(60)
-        elif command == "home":
-            naaginBot.home()
-        else:
-            naaginBot.stop()
-    except:
-        return "Error"
-    return "Okay"
+    # try:
+    naaginId = int(naaginId)
+    naaginBot = naagin_swarm[naaginId]
+    if command == "forwards":
+        naaginBot.tank(50, 50)
+    elif command == "left":
+        naaginBot.tank(-75, 125)
+    elif command == "right":
+        naaginBot.tank(125, -75)
+    elif command == "backwards":
+        naaginBot.tank(-50, -50)
+    elif command == "lock":
+        run_lock(naaginId)
+        naaginBot.lock()
+    elif command == "unlock":
+        if naaginId in last_locks:
+            last_locks.remove(naaginId)
+        naaginBot.unlock()
+    elif command == "up":
+        naaginBot.pitch(45)
+    elif command == "straightPitch":
+        naaginBot.pitch(0)
+    elif command == "down":
+        naaginBot.pitch(-45)
+    elif command == "leftYaw":
+        naaginBot.yaw(-60)
+    elif command == "straightYaw":
+        naaginBot.yaw(0)
+    elif command == "rightYaw":
+        naaginBot.yaw(60)
+    elif command == "home":
+        naaginBot.home()
+    else:
+        naaginBot.stop()
+    # except:
+    #     return "Error"
+    # return "Okay"
 
 @app.route("/programs/<programName>")
-def executeProgram(programName):    
+def executeProgram(programName):
     func = None
     if programName == "forward":
         func = forward.run

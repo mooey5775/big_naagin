@@ -8,8 +8,9 @@ def run(swarm):
     driveAll(50, 30)
     while naaginSwarm[-1].distance() > 45:
         pass
-    naaginSwarm[-1].pitch(60)
-    time.sleep(1)
+    stop()
+    naaginSwarm[-1].pitch(30)
+    time.sleep(3)
 
     if naaginSwarm[-1].distance() < 100: # tall obstacle, swerve
         naaginSwarm[-1].pitch(0) # keep
@@ -43,7 +44,9 @@ def run(swarm):
         time.sleep(1)
 
     else: # short obstacle, climb
+        naaginSwarm[-1].pitch(60)
         driveAll(100, 90) # keep
+        time.sleep(1)
 
         naaginSwarm[-1].pitch(-40) # clear nubs one at a time
         naaginSwarm[-2].pitch(40)
