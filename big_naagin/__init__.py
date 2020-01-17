@@ -32,11 +32,13 @@ def executeCommand(naaginId, command):
             naaginBot.unlock()
         elif command == "up":
             naaginBot.pitch(45)
+        elif command == "straightPitch":
+            naaginBot.pitch(0)
         elif command == "down":
             naaginBot.pitch(-45)
         elif command == "leftYaw":
             naaginBot.yaw(-60)
-        elif command == "straight":
+        elif command == "straightYaw":
             naaginBot.yaw(0)
         elif command == "rightYaw":
             naaginBot.yaw(60)
@@ -54,3 +56,4 @@ def setup_app():
             naagin_swarm[i] = Naagin(i)
         except ValueError:
             naagin_swarm[i] = None
+            print(f"Naagin {i} is not working")
