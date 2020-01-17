@@ -2,6 +2,9 @@ from .commands import *
 
 def run(swarm):
     naaginSwarm = swarm
+
+    setup_swarm(swarm)
+
     home()
     driveAll(100, 90)
 

@@ -2,6 +2,7 @@ from .commands import *
 
 def run(swarm):
     naaginSwarm = swarm
+    setup_swarm(swarm)
     for naagin in naaginSwarm:
         naagin.pitch(0)
         naagin.yaw(55)

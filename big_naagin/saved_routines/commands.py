@@ -7,6 +7,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 naaginSwarm = []
 
+def setup_swarm(swarm):
+    global naaginSwarm
+    naaginSwarm = swarm
+
 def lockAll():
     for naagin in naaginSwarm:
         naagin.lock()

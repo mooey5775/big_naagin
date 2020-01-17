@@ -4,6 +4,7 @@ import threading
 
 from collections import deque
 import time
+import logging
 
 from .naagin import Naagin
 
@@ -36,8 +37,10 @@ def make_naagin_list():
 def programs():
     return render_template("programs.html", programList=["forward", "leftTurn", "rightTurn", "climb", "swerve", "obstacle"])
 
-def run_lock(naaginId, last_locks, current_order):
+def run_lock(naaginId):
     global last_lock_time
+    global current_order
+    global last_locks
     if time.time() - last_lock_time > 60:
         last_locks.clear()
 
@@ -48,6 +51,9 @@ def run_lock(naaginId, last_locks, current_order):
     last_locks.append(naaginId)
     if len(last_locks) == 3:
         current_order = list(reversed(list(last_locks))) + [6 - sum(last_locks)]
+    
+    logging.debug(last_locks)
+    logging.info(current_order)
 
 @app.route("/<naaginId>/<command>")
 def executeCommand(naaginId, command):
@@ -63,7 +69,7 @@ def executeCommand(naaginId, command):
         elif command == "backwards":
             naaginBot.tank(-50, -50)
         elif command == "lock":
-            run_lock(naaginId, last_locks, current_order)
+            run_lock(naaginId)
             naaginBot.lock()
         elif command == "unlock":
             if naaginId in last_locks:
@@ -106,7 +112,7 @@ def executeProgram(programName):
         func = obstacle.run
     # thread the function call
     if func is not None:
-        t1 = threading.Thread(target=func, args=make_naagin_list())
+        t1 = threading.Thread(target=func, args=(make_naagin_list(),))
         t1.start()
     return "Ran program" + programName
 
