@@ -1,4 +1,7 @@
 from flask import Flask, render_template
+
+import threading
+
 from collections import deque
 import time
 
@@ -22,7 +25,7 @@ def make_naagin_list():
 
 @app.route("/programs")
 def programs():
-    return "KJ has to do this"
+    return render_template("programs.html", programList=["forward", "leftTurn", "rightTurn", "climb", "swerve", "obstacle"])
 
 def run_lock(naaginId, last_locks, current_order):
     global last_lock_time
@@ -76,6 +79,27 @@ def executeCommand(naaginId, command):
     except:
         return "Error"
     return "Okay"
+
+@app.route("/programs/<programName>")
+def executeProgram(programName):    
+    func = None
+    if programName == "forward":
+        pass
+    elif programName == "leftTurn":
+        pass
+    elif programName == "rightTurn":
+        pass
+    elif programName == "climb":
+        pass
+    elif programName == "swerve":
+        pass
+    elif programName == "obstacle":
+        pass
+    # thread the function call
+    if func is not None:
+        t1 = threading.Thread(target=func, args=#naaginChain)
+        t1.start()
+    return "Ran program" + programName
 
 def setup_app():
     for i in range(4):

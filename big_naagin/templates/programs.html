@@ -1,0 +1,31 @@
+<!doctype html>
+<title>Naagin Programs</title>
+<style>
+button {
+    width: 30%;
+    text-align: center;
+    display: inline-block; 
+    margin: 0 auto;
+    padding: 3px;
+}
+</style>
+<div class="programs">
+    <h1>Program List</h1>
+    {% for programName in programList %}
+        <button onclick="runProgram('{{ programName }}')">{{ programName }}</button>
+        <br><br>
+    {% endfor %}
+</div>
+<script>
+function runProgram(programName) {
+    var url = window.location.href + "/" + programName;
+    console.log(url)
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
+}
+</script>
